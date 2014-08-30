@@ -1,0 +1,58 @@
+from discomll import dataset
+from discomll.classification import naivebayes
+from discomll.utils import classification_acc
+from disco.core import result_iterator
+
+
+data_tag = ["test:breast_cancer_cont"]
+train = dataset.Data(data_tag = data_tag,
+							data_type = "chunk",
+							X_indices = xrange(0,9),
+							X_meta = ["c" for i in range(9)],
+							y_index = 9,
+							delimiter = ",",
+							y_map = ["benign", "malign"])
+
+data_tag = ["test:breast_cancer_cont_test"]
+test = dataset.Data(data_tag = data_tag,
+							data_type = "chunk",
+							X_indices = xrange(0,9),
+							X_meta = ["c" for i in range(9)], 
+							y_index = 9,
+							delimiter = ",",
+							y_map = ["benign", "malign"])
+
+
+fit_model = naivebayes.fit(train)
+predictions = naivebayes.predict(test, fit_model)
+ca = classification_acc.measure(test + predictions)
+
+for k,v in result_iterator(ca)
+	print k,v
+print predictions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
