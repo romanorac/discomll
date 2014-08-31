@@ -162,12 +162,12 @@ def _tree_view(tree, feature_names = []):
 			name, operator,split = "root", "", ""
 		elif node[5] == "c":
 			operator = " <= " if len(tree[stack[0]]) == 2 else " > "
-			split = node[2]
+			split = round(node[2],4)
 		else:
 			operator = " in "
 			split = "[" + ", ".join(sorted(node[2])) + "]"
 		
-		output += spaces + name + operator + str(split) + " Dist: " +str(node[3]) + ", #Inst: " + str(sum(node[3].values())) + "\n" 
+		output += spaces + name + operator + str(split) + ", Dist: " +str(node[3]) + ", #Inst: " + str(sum(node[3].values())) + "\n" 
 		
 		new_stack = [k[0] for k in tree[stack[0]]] 
 		if len(tree[stack[0]]) == 1:
