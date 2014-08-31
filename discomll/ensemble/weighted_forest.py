@@ -1,3 +1,17 @@
+"""
+Weighted forest with MapReduce
+
+Weighted forest is a novel ensemble algorithm. 
+
+Fit phase
+Weighted forest algorithm builds multiple decision trees with a bootstrap method on a subset of data. In each tree node, it estimates sqrt(num. of attributes)+1 randomly selected attributes (without replacement). It uses decision tree to predict out-of-bag samples. For each prediction of an out-of-bag sample, it measures margin (classifier confidence in prediction) and leaf identifier that outputs prediction. Algorithm uses similarity matrix, where it stores similarities for each out-of-bag sample that was predicted with the same leaf. We assume that samples are similar, if the same leaf predicts them multiple times in multiple decision trees. 
+After algorithm builds all decision trees, it passes similarity matrix to k-medoids algorithm. Similarity matrix presents distances between test samples. We set parameter k as sqrt(num. of attributes)+1. k-medoids algorithm outputs medoids, which are test samples in the cluster centers of the dataset. Medoids are actual samples in a dataset, unlike centroids which are centers of clusters. Algorithm measures average margin for all samples that are in the cluster of certain medoid. It saves the average margin of a decision tree in its model. Algorithm uses this scores as weights of decision trees in predict phase.
+Algorithm builds a forest on each subset of the data and it merges them in large ensemble. Each forest has its own medoids.
+
+Predict phase 
+Algorithm selects a forest (or more, if it finds equal similarities with medoids in multiple forests), that contain most similar medoid with a test sample. Then it uses the same procedure like with small data. Algorithm calculates Gower similarity coefficient with a test sample and every medoid. Only decision trees with high margin on similar test samples output prediction and algorithm stores decision tree margin for each prediction. Algorithm calculates final values for each prediction: (number of margins) * avg(margins) and it selects prediction with highest value.
+
+"""
 
 def simple_init(interface, params):
 	return params
@@ -6,7 +20,7 @@ def map_init(interface, params):
     """Intialize random number generator with given seed `params.seed`."""
     import numpy as np
     import random
-    
+    print params['seed']
     np.random.seed(params['seed'])
     random.seed(params['seed'])
     return params

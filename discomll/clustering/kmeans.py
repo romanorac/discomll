@@ -1,6 +1,8 @@
 """
 kmeans with MapReduce
 
+k-means is a partitional clustering technique that attempts to find a user-specified number of clusters k represented by their centroids.
+
 Implementation is taken from Disco dataming examples and addapted to work with discomll
 """
 

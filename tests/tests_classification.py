@@ -70,7 +70,7 @@ class Tests_Classification(unittest.TestCase):
         thetas1 = lr[1]
 
         thetas_url  = logistic_regression.fit(train_data2)
-        thetas2 = [v for k,v in result_iterator(thetas_url) if k == "thetas"]
+        thetas2 = [v for k,v in result_iterator(thetas_url["logreg_fitmodel"]) if k == "thetas"]
 
         self.assertTrue(np.allclose(thetas1, thetas2))
     
@@ -93,7 +93,7 @@ class Tests_Classification(unittest.TestCase):
             probabilities1.append(probs.values())
 
         thetas_url  = logistic_regression.fit(train_data2, alpha = 1e-8, max_iterations = 10)
-        thetas2 = [v for k,v in result_iterator(thetas_url) if k == "thetas"]
+        thetas2 = [v for k,v in result_iterator(thetas_url["logreg_fitmodel"]) if k == "thetas"]
         results_url = logistic_regression.predict(test_data2, thetas_url)
 
         predictions2 = []

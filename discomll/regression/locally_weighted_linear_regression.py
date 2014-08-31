@@ -1,3 +1,11 @@
+"""
+Locally weighted linear regression with MapReduce
+
+Reference:
+MapReduce version of algorithm is proposed by Cheng-Tao Chu; Sang Kyun Kim, Yi-An Lin, YuanYuan Yu, Gary Bradski, Andrew Ng, and Kunle Olukotun. "Map-Reduce for Machine Learning on Multicore". NIPS 2006.   
+
+"""
+
 
 def simple_init(interface, params):
 	return params
@@ -106,6 +114,7 @@ def fit_predict(training_data, fitting_data, tau = 1, samples_per_job = 0, save_
 		if counter == samples_per_job:
 			print counter, len(x)
 			results.append(_fit_predict(training_data, samples, tau, save_results, show))
+			
 			samples = {}
 		counter+=1
 

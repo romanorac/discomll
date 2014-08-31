@@ -41,7 +41,7 @@ class Tests_Clustering(unittest.TestCase):
         predictions_url = kmeans.predict(test_data, centroids_url)
         #predictions2 = [v[1] for k,v in result_iterator(predictions_url)]
 
-        centroids2 = [v["x"] for k,v in result_iterator(centroids_url)]
+        centroids2 = [v["x"] for k,v in result_iterator(centroids_url["kmeans_fitmodel"])]
         centroids2[0], centroids2[2] = centroids2[2], centroids2[0]
         self.assertTrue(np.allclose(centroids1, centroids2))
 
@@ -71,7 +71,7 @@ class Tests_Clustering(unittest.TestCase):
 
         predictions_url = kmeans.predict(test_data, centroids_url)
         predictions2 = [v[0] for k,v in result_iterator(predictions_url)]
-        centroids2 = [v["x"] for k,v in result_iterator(centroids_url)]
+        centroids2 = [v["x"] for k,v in result_iterator(centroids_url["kmeans_fitmodel"])]
 
         centroids2[0], centroids2[1] = centroids2[1], centroids2[0]
 

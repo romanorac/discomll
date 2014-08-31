@@ -179,7 +179,7 @@ def fit(input, save_results = True, show = False):
 
 	job.params = input.params #job parameters (dataset object)
 	#define name of a job and input data urls
-	job.run(name = "naiveBayes_fit", input = input.params["data_tag"]) 
+	job.run(name = "naivebayes_fit", input = input.params["data_tag"]) 
 	fitmodel_url =  job.wait(show = show)
 	return {"naivebayes_fitmodel": fitmodel_url} #return results url
 

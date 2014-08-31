@@ -24,21 +24,22 @@ class Tests_Regression(unittest.TestCase):
         train_data, test_data = datasets.regression_data_discomll()
 
         lwlr1 = lwlr1.Locally_Weighted_Linear_Regression()
-        taus = [1, 10, 25]
+        taus = [1] #,10, 25]
         sorted_indices = np.argsort([str(el) for el in x_test[:,1].tolist()])
         
-        for tau in taus:	        
-	        thetas1,estimation1 = lwlr1.fit(x_train, y_train, x_test, tau = tau)
-	        thetas1,estimation1 = np.array(thetas1)[sorted_indices],np.array(estimation1)[sorted_indices]
-	        
-	        results = lwlr2.fit_predict(train_data, test_data, tau = tau, show = False)[0]
-	        thetas2, estimation2 = [], []
-	        
-	        for x_id, (thetas, est)  in result_iterator(results):
-	        	thetas2.append(thetas)
-	        	estimation2.append(est)
-	        self.assertTrue(np.allclose(thetas1, thetas2, atol = 1e-8))
-	        self.assertTrue(np.allclose(estimation1, estimation2, atol = 1e-3))
+        for tau in taus:            
+            thetas1,estimation1 = lwlr1.fit(x_train, y_train, x_test, tau = tau)
+            thetas1,estimation1 = np.array(thetas1)[sorted_indices],np.array(estimation1)[sorted_indices]
+            
+            results = lwlr2.fit_predict(train_data, test_data, tau = tau, show = False)[0]
+            thetas2, estimation2 = [], []
+            
+            for x_id, (est, thetas)  in result_iterator(results):                
+                estimation2.append(est)
+                thetas2.append(thetas)
+
+            self.assertTrue(np.allclose(thetas1, thetas2, atol = 1e-8))
+            self.assertTrue(np.allclose(estimation1, estimation2, atol = 1e-3))
     
     def test_lin_reg(self):
         #python -m unittest tests_regression.Tests_Regression.test_lin_reg
@@ -54,13 +55,13 @@ class Tests_Regression(unittest.TestCase):
         prediction1 = lin_reg.predict(x_test)
 
         thetas_url = linear_regression.fit(train_data)
-        thetas2 = [v for k,v in result_iterator(thetas_url)]
+        thetas2 = [v for k,v in result_iterator(thetas_url["linreg_fitmodel"])]
         results = linear_regression.predict(test_data, thetas_url)
-        prediction2 = [v for k,v in result_iterator(results)]
+        prediction2 = [v[0] for k,v in result_iterator(results)]
        
         self.assertTrue(np.allclose(thetas1, thetas2))
         self.assertTrue(np.allclose(prediction1, prediction2))
-	        
+            
 if __name__ == '__main__':
     unittest.main()
 

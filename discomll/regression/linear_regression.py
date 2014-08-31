@@ -1,3 +1,13 @@
+"""
+Linear regression with MapReduce
+
+The linear regression fits theta parameters to training data.
+
+Reference:
+MapReduce version of algorithm is proposed by Cheng-Tao Chu; Sang Kyun Kim, Yi-An Lin, YuanYuan Yu, Gary Bradski, Andrew Ng, and Kunle Olukotun. "Map-Reduce for Machine Learning on Multicore". NIPS 2006.   
+
+"""
+
 def simple_init(interface, params):
     return params
 

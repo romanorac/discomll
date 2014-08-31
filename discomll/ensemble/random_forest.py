@@ -1,3 +1,16 @@
+"""
+Random forest with MapReduce
+
+Fit phase
+Random forest algorithm builds multiple decision trees with a bootstrap method on a subset of data. In each tree node, it estimates sqrt(num. of attributes)+1 randomly selected attributes (without replacement). All decision trees are merged in large ensemble.  
+
+Predict phase
+Algorithm queries as many trees as needed for reliable prediction. Firstly, it randomly chooses without replacement 15 trees. If all trees vote for the same class, it outputs prediction. If there are multiple classes predicted, it chooses 15 trees again. Algorithm calculates difference in probability between most and second most probable prediction. If difference is greater than parameter diff, it outputs prediction. If a test sample is hard to predict (difference is never higher than diff), it queries whole ensemble to make a prediction.
+
+Reference
+Similar algorithm is proposed in: Justin D Basilico, M Arthur Munson, Tamara G Kolda, Kevin R Dixon, and W Philip Kegelmeyer. Comet: A recipe for learning and using large ensembles on massive data. 
+
+"""
 
 def simple_init(interface, params):
 	return params
@@ -142,6 +155,7 @@ def fit(input, trees_per_chunk = 50, max_tree_nodes = 50, leaf_min_inst = 5, cla
 	job.params["split_fun"] = split_fun
 	job.params["intervals"] = split_intervals
 	job.params['seed'] = random_state
+	print random_state
 
 	job.run(name = "random_forest_fit", input = input.params["data_tag"], required_files =[path+"decision_tree.py", path+"measures.py"])
 	

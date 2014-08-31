@@ -1,8 +1,10 @@
 """
 Linear proximal SVM with MapReduce
+
 Algorithm builds a model with continuous features and predicts binary target label (-1, 1). 
 
-Algorithm is proposed by Glenn Fung, O. L. Mangasarian. Incremental Support Vector Machine Classification. Description of algorithm can be found on ftp://ftp.cs.wisc.edu/pub/dmi/tech-reports/01-08.pdf. 
+Reference
+Algorithm is proposed by Glenn Fung, O. L. Mangasarian. Incremental Support Vector Machine Classification. Description of algorithm can be found at ftp://ftp.cs.wisc.edu/pub/dmi/tech-reports/01-08.pdf. 
 """
 
 def simple_init(interface, params):

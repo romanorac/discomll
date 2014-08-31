@@ -1,3 +1,15 @@
+"""
+Decision trees with MapReduce
+
+Fit phase
+Decision trees algorithm builds one decision tree on a subset of data and it estimates all attributes in every tree node.
+
+Predict phase
+Each tree votes and algorithm selects prediction with most votes.
+
+Reference
+Similar algorithm is proposed in Gongqing Wu, Haiguang Li, Xuegang Hu, Yuanjun Bi, Jing Zhang, and Xindong Wu. MRec4.5: C4. 5 ensemble classification with mapreduce.
+"""
 
 def simple_init(interface, params):
 	return params
