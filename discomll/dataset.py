@@ -123,7 +123,7 @@ class Data:
 				f = urllib.urlopen(self.params["X_meta"])
 				
 				feature_names = f.readline().strip().split(self.params["delimiter"])
-				feature_types = f.readline().strip().split(self.params["delimiter"])
+				feature_types = f.readline().strip().replace(" ", "").split(self.params["delimiter"])
 				
 				if feature_types == [""]:
 					self.params["X_meta"] = feature_names
@@ -133,7 +133,6 @@ class Data:
 					if len(feature_types) != len(feature_names):
 						raise Exception("Define the same number of feature names as feature types.")
 
-			
 			elif isinstance(self.params["X_meta"], list):
 				self.params["X_meta"] = self.params["X_meta"]
 			if len(X_indices) != len(self.params["X_meta"]):

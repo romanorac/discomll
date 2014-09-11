@@ -20,7 +20,6 @@ def map_init(interface, params):
     """Intialize random number generator with given seed `params.seed`."""
     import numpy as np
     import random
-    print params['seed']
     np.random.seed(params['seed'])
     random.seed(params['seed'])
     return params

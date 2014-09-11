@@ -155,7 +155,6 @@ def fit(input, trees_per_chunk = 50, max_tree_nodes = 50, leaf_min_inst = 5, cla
 	job.params["split_fun"] = split_fun
 	job.params["intervals"] = split_intervals
 	job.params['seed'] = random_state
-	print random_state
 
 	job.run(name = "random_forest_fit", input = input.params["data_tag"], required_files =[path+"decision_tree.py", path+"measures.py"])
 	

@@ -90,7 +90,7 @@ def map_predict(interface, state, label, inp):
 					value = predictions[prediction]
 					if value == half_ensemble:
 						break
-			out.add(x_id, (prediction, value))
+			out.add(x_id, (prediction, i+1))
 
 
 def fit(input, max_tree_nodes = 50, leaf_min_inst = 5, class_majority = 1, measure = "info_gain", split_fun = "equal_freq", split_intervals = 100,  save_results = True, show = False):
