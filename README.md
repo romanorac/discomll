@@ -48,6 +48,7 @@ pip install discomll
 In [performance analisys](http://1drv.ms/1qj6680), we compare speed and accuracy of discomll algorithms with scikit and Knime. We measure speedups of discomll algorithms with 1, 3, 6 and 9 Disco workers. 
 
 ## Try it now ##
+![alt tag](https://github.com/romanorac/discomll/blob/master/big_data_workflow.png)
 You can try discomll algorithms on the ClowdFlows platform. ClowdFlows is an open sourced cloud based platform for composition, execution, and sharing of interactive machine learning and data mining workflows. Public workflows:
 
 - [Naive Bayes - lymphography dataset,](http://clowdflows.org/workflow/2729/)
