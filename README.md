@@ -1,6 +1,6 @@
 # discomll #
 
-Disco Machine Learning Library (discomll) is a python package for machine learning with MapReduce paradigm. It works with Disco framework for distributed computing. discomll is suited for analysis of large datasets as it offers classification, regression and clustering algorithms. 
+Disco Machine Learning Library (discomll) is a python package for machine learning with MapReduce paradigm. It works with Disco framework for distributed computing. discomll is suited for analysis of large datasets as it offers classification, regression and clustering algorithms. Examples are available in discomll example directory.
 
 ## Algorithms ##
 Classification algorithms
@@ -45,15 +45,19 @@ pip install discomll
 ```
 
 ## Performance analysis ##
-In [performance analisys](http://1drv.ms/1qj6680), we compare speed and accuracy of discomll algorithms with scikit and Knime. We measure speedups of discomll algorithms with 1, 3, 6 and 9 Disco workers. 
+In [performance analisys](http://1drv.ms/1qj6680), we compare speed and accuracy of discomll algorithms with scikit and Knime. We measure speedups of discomll algorithms with 1, 3, 6 and 9 Disco workers.
 
 ## Try it now ##
+You can try discomll algorithms on the ClowdFlows platform. ClowdFlows is an open sourced cloud based platform for composition, execution, and sharing of interactive machine learning and data mining workflows.
+
 ![alt tag](https://github.com/romanorac/discomll/blob/master/big_data_workflow.png)
-You can try discomll algorithms on the ClowdFlows platform. ClowdFlows is an open sourced cloud based platform for composition, execution, and sharing of interactive machine learning and data mining workflows. Public workflows:
+ 
+Public workflows:
 
 - [Naive Bayes - lymphography dataset,](http://clowdflows.org/workflow/2729/)
 - [Decision trees - lymphography dataset,](http://clowdflows.org/workflow/2727/)
 - [Random forest - segmentation dataset,](http://clowdflows.org/workflow/2731/)
+- [Weighted forest - lymphography dataset,](http://clowdflows.org/workflow/2797/)
 
 
 ## Additional info ##
