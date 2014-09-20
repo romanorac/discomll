@@ -1,7 +1,8 @@
 import numpy as np
 import Orange
+import discomll
 from discomll import dataset
-path = "/Users/hiphop/Documents/GitHub/discomll/datasets/"
+path = "/".join(discomll.__file__.split("/")[:-2] + ["discomll", "datasets", ""])
 
 def breastcancer_disc_orange(replication = 2):
 	test_samples = 100

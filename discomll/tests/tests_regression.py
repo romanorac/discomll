@@ -24,7 +24,7 @@ class Tests_Regression(unittest.TestCase):
         train_data, test_data = datasets.regression_data_discomll()
 
         lwlr1 = lwlr1.Locally_Weighted_Linear_Regression()
-        taus = [1] #,10, 25]
+        taus = [1, 10, 25]
         sorted_indices = np.argsort([str(el) for el in x_test[:,1].tolist()])
         
         for tau in taus:            
@@ -37,7 +37,7 @@ class Tests_Regression(unittest.TestCase):
             for x_id, (est, thetas)  in result_iterator(results):                
                 estimation2.append(est)
                 thetas2.append(thetas)
-
+            
             self.assertTrue(np.allclose(thetas1, thetas2, atol = 1e-8))
             self.assertTrue(np.allclose(estimation1, estimation2, atol = 1e-3))
     

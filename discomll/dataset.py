@@ -132,7 +132,7 @@ class Data:
 					self.params["X_names"] = feature_names
 					if len(feature_types) != len(feature_names):
 						raise Exception("Define the same number of feature names as feature types.")
-
+				
 			elif isinstance(self.params["X_meta"], list):
 				self.params["X_meta"] = self.params["X_meta"]
 			if len(X_indices) != len(self.params["X_meta"]):

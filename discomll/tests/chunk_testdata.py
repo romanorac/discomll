@@ -2,7 +2,7 @@
 def chunk_testdata():
 	import discomll 
 	from disco import ddfs
-	path = "/".join(discomll.__file__.split("/")[:-2] + ["datasets", ""])
+	path = "/".join(discomll.__file__.split("/")[:-2] + ["discomll", "datasets", ""])
 
 	tags_chunk = ["test:breast_cancer_cont", "test:breast_cancer_cont_test", "test:breast_cancer_disc", "test:breast_cancer_disc_test", "test:ex3", "test:ex3_test", "test:ex4", "test:iris", "test:iris_test","test:regression_data1","test:regression_data2", "test:regression_data_test1","test:regression_data_test2"]
 	

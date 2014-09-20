@@ -81,6 +81,13 @@ def fit_predict(training_data, fitting_data, tau = 1, samples_per_job = 0, save_
 	import numpy as np
 	from disco.core import Disco
 
+	"""
+	training_data - training samples
+	fitting_data - dataset to be fitted to training data.
+	tau - controls how quickly the weight of a training sample falls off with distance of its x(i) from the query point x.
+	samples_per_job - define a number of samples that will be processed in single mapreduce job. If 0, algorithm will calculate number of samples per job.
+	"""
+
 	try:
 		tau = float(tau)
 		if tau <= 0:
@@ -100,29 +107,30 @@ def fit_predict(training_data, fitting_data, tau = 1, samples_per_job = 0, save_
 	
 	samples = {}
 	results = []
-	tau = float(2*tau**2)
+	tau = float(2*tau**2) #calculate tau once
 	counter = 0
 	
 	for test_id, x in result_iterator(job.wait(show = show)):
 		if samples_per_job == 0:
-			if len(x) <= 100:
-				samples_per_job = 100
+			#calculate number of samples per job 
+			if len(x) <= 100: #if there is less than 100 attributes
+				samples_per_job = 100 #100 samples is max per on job
 			else:
-				samples_per_job= len(x) * -25/900. + 53
+				#there is more than 100 attributes
+				samples_per_job= len(x) * -25/900. + 53 #linear function
 
 		samples[test_id] = x
-		if counter == samples_per_job:
-			print counter, len(x)
+		if counter == samples_per_job: 
 			results.append(_fit_predict(training_data, samples, tau, save_results, show))
-			
 			samples = {}
 		counter+=1
 
-	if len(samples) > 0:
+	if len(samples) > 0: #if there is some samples left in the the dictionary
 		results.append(_fit_predict(training_data, samples, tau, save_results, show))
 
+	#merge results of every iteration into a single tag
 	ddfs = Disco().ddfs
-	results = [list(ddfs.blobs(tag))[0] for tag in results] 
+	results = [[list(ddfs.blobs(tag))[0][0]] for tag in results] 
 	return results
 
 
