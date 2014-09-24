@@ -117,11 +117,12 @@ def fit_predict(training_data, fitting_data, tau = 1, samples_per_job = 0, save_
 				samples_per_job = 100 #100 samples is max per on job
 			else:
 				#there is more than 100 attributes
-				samples_per_job= len(x) * -25/900. + 53 #linear function
+				samples_per_job = len(x) * -25/900. + 53 #linear function
 
 		samples[test_id] = x
 		if counter == samples_per_job: 
 			results.append(_fit_predict(training_data, samples, tau, save_results, show))
+			counter = 0
 			samples = {}
 		counter+=1
 
@@ -130,8 +131,9 @@ def fit_predict(training_data, fitting_data, tau = 1, samples_per_job = 0, save_
 
 	#merge results of every iteration into a single tag
 	ddfs = Disco().ddfs
-	results = [[list(ddfs.blobs(tag))[0][0]] for tag in results] 
-	return results
+	ddfs.tag(job.name, [[list(ddfs.blobs(tag))[0][0]] for tag in results])
+	
+	return ["tag://"+job.name]
 
 
 

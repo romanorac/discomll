@@ -54,11 +54,22 @@ You can try discomll algorithms on the ClowdFlows platform. ClowdFlows is an ope
  
 Public workflows:
 
-- [Naive Bayes - lymphography dataset,](http://clowdflows.org/workflow/2729/)
-- [Decision trees - lymphography dataset,](http://clowdflows.org/workflow/2727/)
-- [Random forest - segmentation dataset,](http://clowdflows.org/workflow/2731/)
-- [Weighted forest - lymphography dataset,](http://clowdflows.org/workflow/2797/)
-
+- [naive Bayes - lymphography dataset,](http://clowdflows.org/workflow/2729/)
+- [naive Bayes - segmentation dataset,](http://clowdflows.org/workflow/2788/)
+- [logistic regression - sonar dataset,](http://clowdflows.org/workflow/2801/)
+- [logistic regression - ionosphere dataset,](http://clowdflows.org/workflow/2802/)
+- [linear SVM - sonar dataset,](http://clowdflows.org/workflow/2799/)
+- [linear SVM - ionosphere dataset,](http://clowdflows.org/workflow/2800/)
+- [decision trees - lymphography dataset,](http://clowdflows.org/workflow/2727/)
+- [decision trees - segmentation dataset,](http://clowdflows.org/workflow/2796/)
+- [random forest - lymphography dataset,](http://clowdflows.org/workflow/2789/)
+- [random forest - segmentation dataset,](http://clowdflows.org/workflow/2731/)
+- [weighted forest - lymphography dataset,](http://clowdflows.org/workflow/2797/)
+- [weighted forest - segmentation dataset,](http://clowdflows.org/workflow/2798/)
+- [k-means - linear dataset,](http://clowdflows.org/workflow/2812/)
+- [k-means - segmentation dataset,](http://clowdflows.org/workflow/2811/)
+- [linear regression - linear dataset,](http://clowdflows.org/workflow/2815/)
+- [linear regression - fraction dataset,](http://clowdflows.org/workflow/2816/)
 
 ## Additional info ##
 Write me at orac.roman@gmail.com.

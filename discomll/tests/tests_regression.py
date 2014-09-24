@@ -31,7 +31,7 @@ class Tests_Regression(unittest.TestCase):
             thetas1,estimation1 = lwlr1.fit(x_train, y_train, x_test, tau = tau)
             thetas1,estimation1 = np.array(thetas1)[sorted_indices],np.array(estimation1)[sorted_indices]
             
-            results = lwlr2.fit_predict(train_data, test_data, tau = tau, show = False)[0]
+            results = lwlr2.fit_predict(train_data, test_data, tau = tau)
             thetas2, estimation2 = [], []
             
             for x_id, (est, thetas)  in result_iterator(results):                

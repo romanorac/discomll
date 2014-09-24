@@ -2,7 +2,7 @@ from setuptools import setup,find_packages
 
 setup(
     name='discomll',
-    version='0.1.2',
+    version='0.1.3',
     author='Roman Orac',
     author_email='orac.roman@gmail.com',
     url="https://github.com/romanorac/discomll",
