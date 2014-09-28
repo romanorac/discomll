@@ -1,5 +1,5 @@
 """
-Linear proximal SVM with MapReduce
+Linear SVM with MapReduce
 
 Algorithm builds a model with continuous features and predicts binary target label (-1, 1). 
 
