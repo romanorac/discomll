@@ -19,7 +19,7 @@ def map_fit(interface, state, label, inp):
 	import numpy as np
 	combiner = {} #combiner used for joining of intermediate pairs
 	out = interface.output(0) #all outputted pairs have the same output label
-
+	
 	for row in inp: #for every row in data chunk
 		row = row.strip().split(state["delimiter"]) #split row
 		if len(row) > 1: #check if row is empty
@@ -31,9 +31,9 @@ def map_fit(interface, state, label, inp):
 					if state["X_meta"][i] == "c": #continuous features
 						if pair in combiner:
 							#convert to float and store value
-							combiner[pair].append(float(row[j])) 
+							combiner[pair].append(np.float32(row[j])) 
 						else:
-							combiner[pair] = [float(row[j])]    
+							combiner[pair] = [np.float32(row[j])]    
 					
 					else: #discrete features
 						#add feature value to pair
@@ -43,13 +43,14 @@ def map_fit(interface, state, label, inp):
 					
 					#increase label counts
 					combiner[row[state["y_index"]]] = combiner.get(row[state["y_index"]], 0) + 1
-
+	
 	for k, v in combiner.iteritems(): #all pairs in combiner are output
 		if len(k.split(state["delimiter"])) == 2: #continous features  
 			#number of elements, partial mean and variance
-			out.add(k, (np.size(v), np.mean(v), np.var(v)))  
+			out.add(k, (np.size(v), np.mean(v, dtype=np.float32), np.var(v, dtype=np.float32)))  
 		else: #discrete features and labels
 			out.add(k, v)
+	
 	
 def reduce_fit(interface, state, label, inp):
 	"Function separates aggregation of continuous and discrete features. For continuous features it aggregates partially calculated means and variances and returns them. For discrete features it aggregates pairs and returns them. Pairs with label occurrences are used to calculate prior probabilities"
@@ -102,14 +103,14 @@ def reduce_fit(interface, state, label, inp):
 	#if statistics for continuous features were not output in last iteration
 	if len(means) > 0: 
 		mean,var = zip(*[combiner[key] for key in sorted(combiner.keys())])
-		out.add("mean", np.array(means + [mean]))
-		variances = np.array(variances + [var])
+		out.add("mean", np.array(means + [mean], dtype=np.float32))
+		variances = np.array(variances + [var], dtype=np.float32)
 		out.add("var", variances)
 		out.add("var_log", np.log(np.pi * variances))	
 
 	#calculation of prior probabilities
 	prior = [fit_model[y_label]/float(fit_model["y_sum"]) for y_label in fit_model["y_labels"]]
-	out.add("prior", np.array(prior))
+	out.add("prior", np.array(prior, dtype=np.float32))
 	out.add("prior_log", np.log(prior))
 	out.add("iv",list(fit_model["iv"]))
 	out.add("y_labels", fit_model["y_labels"])
@@ -143,7 +144,7 @@ def map_predict(interface, state, label, inp):
 			
 			if disc: #discrete features
 				#multinomial distribution
-				probs = probs + np.sum([(0 if row[i] in state["missing_vals"] else state["fit_model"][(str(i), row[i])]) for i in discrete], axis = 0)
+				probs = probs + np.sum([(0 if row[i] in state["missing_vals"] else state["fit_model"].get((str(i), row[i]), np.zeros(1))) for i in discrete], axis = 0)
 
 			# normalize by P(x) = P(f_1, ..., f_n)
 			log_prob_x = np.log(np.sum(np.exp(probs)))
@@ -212,6 +213,9 @@ def predict(input, fitmodel_url, m = 1, save_results = True, show = False):
 	if "naivebayes_fitmodel" in fitmodel_url:
 		#fit model is loaded from ddfs
 		fit_model = dict((k,v) for k,v in result_iterator(fitmodel_url["naivebayes_fitmodel"]))
+		if len(fit_model["y_labels"]) < 2:
+			print "There is only one class in training data."
+			return []
 	else:
 		raise Exception("Incorrect fit model.")
 		

@@ -49,13 +49,16 @@ def reduce_mse(interface, state, label, inp):
 
 def measure(test_data, predictions, measure = "ca" , save_results = True, show = False):
 	from disco.worker.pipeline.worker import Worker, Stage
-	from disco.core import Job
+	from disco.core import Job, result_iterator
 	from disco.worker.task_io import task_input_stream, chain_reader
 	
 	if measure not in ["ca", "mse"]:
 		raise Exception("measure should be ca or mse.")
 	if test_data.params["id_index"] == -1:
 		raise Exception("ID index should be defined.")
+
+	if predictions == []:
+		return "No predictions", None
 
 	#define a job and set save of results to ddfs
 	job = Job(worker = Worker(save_results = save_results)) 
@@ -74,8 +77,9 @@ def measure(test_data, predictions, measure = "ca" , save_results = True, show =
 	('group_all', Stage("reduce", init = simple_init, process = reduce_proces, sort = True, combine = True))]
 
 	job.run(name = "ma_measure_accuracy", input =  parsed_testdata + predictions) 
-	
-	return job.wait(show = show) #return results url
+
+	measure, acc = [(measure, acc) for measure, acc in result_iterator(job.wait(show = show))][0]
+	return  measure, acc
 
 
 

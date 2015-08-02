@@ -33,7 +33,7 @@ def rand_indices(x, rand_attr):
 				break
 	return rand_list
 
-def fit(x, y, t, randomized, max_tree_nodes, leaf_min_inst, class_majority, measure, split_fun, intervals):
+def fit(x, y, t, randomized, max_tree_nodes, min_samples_leaf, min_samples_split, class_majority, measure, accuracy, separate_max):
 	"""
 	Function builds a binary decision tree with given dataset and it expand tree nodes in priority order. Tree model is stored in a dictionary and it has following structure: 
 	{parent_identifier: [(child_identifier, highest_estimated_feature_index , split_value, distribution_of_labels, depth, feature_type)]}
@@ -43,7 +43,7 @@ def fit(x, y, t, randomized, max_tree_nodes, leaf_min_inst, class_majority, meas
 	t: list - features types
 	randomized: boolean - if True, algorithm estimates sqrt(num_of_features)+1 randomly selected features each iteration. If False, it estimates all features in each iteration.
 	max_tree_nodes: integer - number of tree nodes to expand. 
-	leaf_min_inst: float - minimal number of samples in leafs.
+	min_samples_leaf: float - minimal number of samples in leafs.
 	class_majority: float - purity of the classes in leafs.
 	measure: measure function - information gain or mdl.
 	split_fun: split function - discretization of continuous features can be made randomly or with equal label frequency.
@@ -56,12 +56,18 @@ def fit(x, y, t, randomized, max_tree_nodes, leaf_min_inst, class_majority, meas
 	operation = {"c": (np.less_equal, np.greater), "d": (np.in1d, np.in1d)}
 	tree = {0:[(node_id, -1 ,"", dict(Counter(y)), depth, "")]} #initialize tree model	
 	mapping = range(len(x[0])) #global features indices
-	rand_attr = int(np.sqrt(len(x[0]))) + 1	#sqrt(num_of_features)+1 is estimated if randomized == True. If randomized == False, all indices are estimated at each node.
-	est_indices = rand_indices(x, rand_attr) if randomized else range(len(x[0])) 
-	
-	#estimate indices with given measure
-	est = [measure(x[:,i], y, t[i], split_fun, intervals) for i in est_indices]
-	max_est, split = max(est) #find highest estimated split
+	rand_attr = int(np.ceil(np.sqrt(len(x[0])))) #sqrt(num_of_features) is estimated if randomized == True. If randomized == False, all indices are estimated at each node.
+	recalculate = True
+	while recalculate:
+		recalculate = False
+        	est_indices = rand_indices(x, rand_attr) if randomized else range(len(x[0])) 
+		#estimate indices with given measure
+		est = [measure(x[:,i], y, t[i], accuracy, separate_max) for i in est_indices]
+		try:
+			max_est, split = max(est) #find highest estimated split
+		except:
+			recalculate = True
+
 	best = est_indices[est.index((max_est, split))] #select feature index with highest estimate
 	
 	queue = Queue.PriorityQueue() #initialize priority queue
@@ -73,6 +79,7 @@ def fit(x, y, t, randomized, max_tree_nodes, leaf_min_inst, class_majority, meas
 		
 		#features indices are mapped due to constantly changing subsets of data 
 		best_map = mapping[best] 
+
 		for j in range(2): #for left and right branch of the tree
 			selection = range(len(x[0])) #select all indices for the new subset
 			new_mapping = [i for i in mapping] #create a mapping of indices for a new subset
@@ -86,6 +93,8 @@ def fit(x, y, t, randomized, max_tree_nodes, leaf_min_inst, class_majority, meas
 			indices = operation[t[best_map]][j](x[:,best],split[j]).nonzero()[0]
 			#create new subsets of data
 			sub_x, sub_y = x[indices.reshape(len(indices),1), selection], y[indices]
+			if j==0 and (len(sub_y) < min_samples_leaf or len(x)-len(sub_y) < min_samples_leaf):
+				break
 			
 			node_id += 1 #increase node identifier
 			y_dist = Counter(sub_y) #distribution of labels in the new node
@@ -96,22 +105,23 @@ def fit(x, y, t, randomized, max_tree_nodes, leaf_min_inst, class_majority, meas
 			#select new indices for estimation
 			est_indices = rand_indices(sub_x, rand_attr) if randomized and len(sub_x[0]) > rand_attr else range(len(sub_x[0]))
 			#check label majority
-			curent_majority = y_dist[max(y_dist, key = y_dist.get)]/float(len(sub_y))
-
-			#if new node satisfies following conditions it can be further split 
-			if curent_majority < class_majority and len(sub_y) > leaf_min_inst and est_indices != -1: 
+			current_majority = y_dist[max(y_dist, key = y_dist.get)]/float(len(sub_y))
+			
+			#if new node satisfies following conditions it can be further split
+			if current_majority < class_majority and len(sub_y) > min_samples_split and est_indices != -1: 
 				#estimate selected indices
-				est = [measure(sub_x[:,i], sub_y, t[new_mapping[i]], split_fun, intervals) for i in est_indices]
-
-				max_est, new_split = max(est) #find highest estimated split
+				est = [measure(sub_x[:,i], sub_y, t[new_mapping[i]], accuracy, separate_max) for i in est_indices]
+				try:
+					max_est, new_split = max(est) #find highest estimated split
+				except:
+					continue
 				#select feature index with highest estimate
 				new_best = est_indices[est.index((max_est, new_split))]
-
 				#put new datasets in the queue with inverse value of estimate (priority order)
-				queue.put((max_est*-1,(node_id, sub_x, sub_y, new_mapping, new_best, new_split, depth+1)))
+				queue.put((max_est*-1*len(sub_y),(node_id, sub_x, sub_y, new_mapping, new_best, new_split, depth+1)))
 	return tree
 
-def predict(tree, x, y = []):
+def predict(tree, x, y = [], dist=False):
 	"""
 	Function makes a prediction of one sample with a tree model. If y label is defined it returns node identifier and margin.
 
@@ -142,10 +152,13 @@ def predict(tree, x, y = []):
 				#sum labels distribution to get parent label distribution
 				node_id = str(nodes[0][0]) + "," + str(nodes[1][0])
 				index, nodes = 0, [[0,0,0,{ k: nodes[0][3].get(k, 0) + nodes[1][3] .get(k, 0) for k in set(nodes[0][3]) | set(nodes[1][3] )}]]
-				#print node_id, nodes[0][3], y
 
 		if node_id in tree.keys(): #check if tree can be traversed further
 			continue
+
+		if dist:
+			suma = sum(nodes[index][3].values())
+			return Counter({k:v/float(suma) for k, v in nodes[index][3].iteritems()})
 		
 		prediction = max(nodes[index][3], key = nodes[index][3].get)
 		if y == []:

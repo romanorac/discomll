@@ -96,7 +96,7 @@ class Data:
 			self.params["missing_vals"] = [] #no missing values
 		#missing_vals param is passed as string
 		elif isinstance(self.params["missing_vals"], basestring): 
-			self.params["missing_vals"] = self.params["missing_vals"].split(",") #missing values symbols are separated with comma.
+			self.params["missing_vals"] = set(self.params["missing_vals"].split(",")) #missing values symbols are separated with comma.
 
 		#no transformation of binary target variable is set
 		if "y_map" not in self.params or self.params["y_map"] == "": 
