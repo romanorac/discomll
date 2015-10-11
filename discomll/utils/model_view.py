@@ -11,14 +11,18 @@ def output_model(fitmodel_url):
 		output = _linsvm_model(fitmodel_url["linsvm_fitmodel"])
 	elif "kmeans_fitmodel" in fitmodel_url:
 		output = _kmeans_model(fitmodel_url["kmeans_fitmodel"])
-	elif "dt_fitmodel" in fitmodel_url:
-		output = _dt_model(fitmodel_url["dt_fitmodel"])
-	elif "rf_fitmodel" in fitmodel_url:
-		output = _rf_model(fitmodel_url["rf_fitmodel"])
-	elif "wrf_fitmodel" in fitmodel_url:
-		output = _wrf_model(fitmodel_url["wrf_fitmodel"])
+	elif "fddt_fitmodel" in fitmodel_url:
+		output = _dt_model(fitmodel_url["fddt_fitmodel"])
+	elif "drf_fitmodel" in fitmodel_url:
+		output = _rf_model(fitmodel_url["drf_fitmodel"])
+	elif "dwf_fitmodel" in fitmodel_url:
+		output = _wrf_model(fitmodel_url["dwf_fitmodel"])
+	elif "dwfr_fitmodel" in fitmodel_url:
+		output = _wrf_model(fitmodel_url["dwfr_fitmodel"])
 	elif "linreg_fitmodel" in fitmodel_url:
 		output = _linreg_model(fitmodel_url["linreg_fitmodel"])
+	else:
+		output="Model visualization not found."
 	return output
 
 def _wrf_model(fitmodel):
@@ -27,9 +31,12 @@ def _wrf_model(fitmodel):
 	for k, v in result_iterator(fitmodel):
 		if k == "X_names":
 			X_names = v
+		elif k == "fill_in_values":
+			continue
 		elif k == "X_meta":
 			X_meta = v
 		else:
+			v=v[0]
 			output += "FOREST " + str(k) + "\n"
 			param_k = len(v[2])
 			output += "k-medoids parameter: "+ str(param_k) + "\n\n"
@@ -55,9 +62,6 @@ def _wrf_model(fitmodel):
 					if "margin"+str(i) in tree:
 						output+= "average margin " + str(i+1) + ": " + str(tree.pop("margin"+str(i)))+"\n" 
 				output += _tree_view(tree, X_names) + "\n"
-
-			
-
 	return output
 
 def _rf_model(fitmodel):
@@ -66,23 +70,26 @@ def _rf_model(fitmodel):
 	for k, v in result_iterator(fitmodel):
 		if k == "X_names":
 			X_names = v
+		elif k == "fill_in_values":
+			continue
 		else:
 			output += "Tree " + str(k) + "\n"
-			output += _tree_view(v, X_names) + "\n"
+			output += _tree_view(v[0], X_names) + "\n"
 
 	return output
 
 
 def _dt_model(fitmodel):
-	
 	X_names = []
 	output = "Decision Trees model\n\n"
 	for k, v in result_iterator(fitmodel):
 		if k == "X_names":
 			X_names = v
+		elif k == "fill_in_values":
+			continue
 		else:
 			output += str(k) + "\n"
-			output += _tree_view(v, X_names) + "\n"
+			output += _tree_view(v[0], X_names) + "\n"
 
 	return output
 
@@ -144,7 +151,9 @@ def _tree_view(tree, feature_names = []):
 	tree = copy.deepcopy(tree)
 	output = ""
 	stack=[0]
-	tree[0].pop(1)
+
+	if len(tree) > 0 and len(tree[0]) > 1:
+		tree[0].pop(1)
 	
 	while len(stack) > 0:
 		while stack[0] not in tree:

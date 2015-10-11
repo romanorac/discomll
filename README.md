@@ -38,14 +38,18 @@ discomll enables multiple settings for a dataset:
 ## Installing ##
 Prerequisites
 - Disco 0.5.1 or newer,
-- numpy should be installed on all worker nodes.
+- numpy should be installed on all worker nodes,
+- orange and scikit-learn are used in unit tests.
 
 ```bash
 pip install discomll
 ```
 
 ## Performance analysis ##
-In [performance analisys](http://1drv.ms/1qj6680), we compare speed and accuracy of discomll algorithms with scikit and Knime. We measure speedups of discomll algorithms with 1, 3, 6 and 9 Disco workers.
+In [performance analysis](http://1drv.ms/1qj6680), we compare speed and accuracy of discomll algorithms with scikit and Knime. We measure speedups of discomll algorithms with 1, 3, 6 and 9 Disco workers.
+
+## Performance analysis 2##
+In [second performance analysis](http://1drv.ms/1FYORb8), we compare accuracy of distributed ensemble algorithms with scikit-learn algorithms. We train the model on whole dataset with distributed algorithms and on a subset with single core algorithms. We show that distributed ensembles achieve similar accuracy as single core algorithms. 
 
 ## Try it now ##
 You can try discomll algorithms on the ClowdFlows platform. ClowdFlows is an open sourced cloud based platform for composition, execution, and sharing of interactive machine learning and data mining workflows. For instruction see the [User Guide.](https://onedrive.live.com/redir?resid=C695DFFBD3161AEA!161&authkey=!AERQJpsxOqkLykI&ithint=file%2cpdf)
@@ -72,11 +76,14 @@ Public workflows:
 - [linear regression - fraction dataset,](http://clowdflows.org/workflow/2816/)
 
 ## Release notes ##
+### version 0.1.4.1 (in development) ###
+ - model view fixed for ensembles,
+ - bug fixes in examples and tests.
+
 ### version 0.1.4 ###
- - improvments of ensemble algorithms,
- - bug fixes of other algorithms.
-
-
+ - distributed weighted forest Rand was added. Algorithm is similar to distributed weighted forest, but it uses randomly selected medoids.
+ - improvements of algorithms, especially ensembles,
+ - performance analysis 2.
 
 ## Additional info ##
 Write me at orac.roman@gmail.com.

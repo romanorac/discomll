@@ -176,7 +176,7 @@ def map_predict_dist(interface, state, label, inp):
             prediction = max(y_dist, key=y_dist.get)
             out.add(x_id, (prediction, y_dist[prediction]))
 
-def fit(input, trees_per_chunk=3, max_tree_nodes=None, min_samples_leaf=10, min_samples_split=5, class_majority=1, measure="info_gain", accuracy=1, separate_max=True, random_state=None, save_results=True, show=False):
+def fit(input, trees_per_chunk=3, max_tree_nodes=50, min_samples_leaf=10, min_samples_split=5, class_majority=1, measure="info_gain", accuracy=1, separate_max=True, random_state=None, save_results=True, show=False):
 
     from disco.worker.pipeline.worker import Worker, Stage
     from disco.core import Job

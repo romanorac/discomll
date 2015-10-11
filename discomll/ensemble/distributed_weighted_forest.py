@@ -266,7 +266,7 @@ def map_predict(interface, state, label, inp):
 
             out.add(x_id, (max(global_predictions, key = global_predictions.get),))         
     
-def fit(input, trees_per_chunk=3, max_tree_nodes=None, min_samples_leaf=10, min_samples_split=5, class_majority=1, measure="info_gain", k="sqrt", accuracy=1, random_state=None, separate_max=True, save_results=True, show=False):
+def fit(input, trees_per_chunk=3, max_tree_nodes=50, min_samples_leaf=10, min_samples_split=5, class_majority=1, measure="info_gain", k="sqrt", accuracy=1, random_state=None, separate_max=True, save_results=True, show=False):
     
     from disco.worker.pipeline.worker import Worker, Stage
     from disco.core import Job

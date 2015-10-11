@@ -5,7 +5,7 @@ Weighted forest is a novel ensemble algorithm.
 
 Fit phase
 Weighted forest algorithm builds multiple decision trees with a bootstrap method on a subset of data. In each tree node, it estimates sqrt(num. of attributes)+1 randomly selected attributes (without replacement). It uses decision tree to predict out-of-bag samples. For each prediction of an out-of-bag sample, it measures margin (classifier confidence in prediction) and leaf identifier that outputs prediction. Algorithm uses similarity matrix, where it stores similarities for each out-of-bag sample that was predicted with the same leaf. We assume that samples are similar, if the same leaf predicts them multiple times in multiple decision trees. 
-After algorithm builds all decision trees, it passes similarity matrix to k-medoids algorithm. Similarity matrix presents distances between test samples. We set parameter k as sqrt(num. of attributes)+1. k-medoids algorithm outputs medoids, which are test samples in the cluster centers of the dataset. Medoids are actual samples in a dataset, unlike centroids which are centers of clusters. Algorithm measures average margin for all samples that are in the cluster of certain medoid. It saves the average margin of a decision tree in its model. Algorithm uses this scores as weights of decision trees in predict phase.
+After algorithm builds all decision trees, it randomly chooses medoids. Similarity matrix presents distances between test samples. We set parameter k as sqrt(num. of attributes)+1. k-medoids algorithm outputs medoids, which are test samples in the cluster centers of the dataset. Medoids are actual samples in a dataset, unlike centroids which are centers of clusters. Algorithm measures average margin for all samples that are in the cluster of certain medoid. It saves the average margin of a decision tree in its model. Algorithm uses this scores as weights of decision trees in predict phase.
 Algorithm builds a forest on each subset of the data and it merges them in large ensemble. Each forest has its own medoids.
 
 Predict phase 
@@ -236,7 +236,7 @@ def map_predict(interface, state, label, inp):
             out.add(x_id, (max_pred, num_trees))            
            
     
-def fit(input, trees_per_chunk=3, max_tree_nodes=None, min_samples_leaf=10, min_samples_split=5, class_majority=1, measure="info_gain", num_medoids=10,  accuracy=1, separate_max=True, random_state=None, save_results=True, show=False):
+def fit(input, trees_per_chunk=3, max_tree_nodes=50, min_samples_leaf=10, min_samples_split=5, class_majority=1, measure="info_gain", num_medoids=10,  accuracy=1, separate_max=True, random_state=None, save_results=True, show=False):
     from disco.worker.pipeline.worker import Worker, Stage
     from disco.core import Job
     import discomll

@@ -44,8 +44,7 @@ for k,v in result_iterator(predictions):
 
 #measure accuracy
 ca = accuracy.measure(test, predictions)
-for k,v in result_iterator(ca):
-    print k, v
+print ca
 
 
 

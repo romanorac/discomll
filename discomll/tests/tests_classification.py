@@ -104,41 +104,6 @@ class Tests_Classification(unittest.TestCase):
         self.assertTrue(np.allclose(thetas1, thetas2))
         self.assertTrue(np.allclose(probabilities1, probabilities2, atol = 1e-5))
         self.assertListEqual(predictions1, predictions2)
-    
-
-    """
-    def test_svm1(self):
-        #python -m unittest tests_classification.Tests_Classification.test_svm1
-        from sklearn import svm
-        from discomll.classification import linear_proximal_svm
-        
-        data = load_dataset.Data()
-        _, X_train, y_train, _, X_pred, y_pred = data.load_breast_cancer_disc()
-        train_data, test_data = data.load_breast_cancer_disc_ddfs()
-
-        clf = svm.SVC()
-        clf.fit(X_train, y_train)
-        predictions1 = clf.predict(X_pred)
-
-        fit_model = linear_proximal_svm.fit(train_data)
-        predictions2 = linear_proximal_svm.predict(test_data, fit_model)
-
-        for i,(k,v) in enumerate(predictions2):
-            if float(v[0]) != predictions1[i]:
-                print k, v, predictions1[i]
-    """
-    """
-    clf = svm.SVC()
-    clf.fit(X_pred, y_pred)
-    predictions1 = clf.predict(X_train)
-
-    fit_model = linear_proximal_svm.fit(test_data)
-    predictions2 = linear_proximal_svm.predict(train_data, fit_model)
-
-    for i,(k,v) in enumerate(predictions2):
-        if float(v[0]) != predictions1[i]:
-            print k, v, predictions1[i]
-    """
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 from discomll import dataset
-from discomll.classification import linear_proximal_svm
+from discomll.classification import linear_svm
 
 train = dataset.Data(data_tag = ["http://ropot.ijs.si/data/sonar/train/xaaaaa.gz", "http://ropot.ijs.si/data/sonar/train/xaaabj.gz"],
                             data_type = "gzip",
@@ -21,6 +21,6 @@ test = dataset.Data(data_tag = ["http://ropot.ijs.si/data/sonar/test/xaaaaa.gz",
                             y_map = ["R","M"],
                             delimiter = ",")
 
-fit_model = linear_proximal_svm.fit(train)
-predictions = linear_proximal_svm.predict(test, fit_model)
+fit_model = linear_svm.fit(train)
+predictions = linear_svm.predict(test, fit_model)
 print predictions

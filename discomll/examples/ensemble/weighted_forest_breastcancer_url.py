@@ -1,5 +1,5 @@
 from discomll import dataset
-from discomll.ensemble import weighted_forest
+from discomll.ensemble import distributed_weighted_forest
 from discomll.utils import model_view
 from disco.core import result_iterator
 from discomll.utils import accuracy
@@ -11,11 +11,11 @@ train = dataset.Data(data_tag = [["http://archive.ics.uci.edu/ml/machine-learnin
                     y_index = 10,
                     delimiter = ",") 
 
-fit_model = weighted_forest.fit(train, trees_per_chunk = 50, max_tree_nodes = 50, leaf_min_inst = 5, class_majority = 1, measure = "info_gain", split_fun = "equal_freq", split_intervals = 100)
+fit_model = distributed_weighted_forest.fit(train, trees_per_chunk=3, max_tree_nodes=50, min_samples_leaf=10, min_samples_split=5, class_majority=1, measure="info_gain",  accuracy=1, separate_max=True, random_state=None, save_results=True)
 print model_view.output_model(fit_model)
 
 #predict training dataset
-predictions = weighted_forest.predict(train, fit_model) 
+predictions = distributed_weighted_forest.predict(train, fit_model) 
 
 #output results
 for k,v in result_iterator(predictions):
@@ -23,6 +23,4 @@ for k,v in result_iterator(predictions):
 
 #measure accuracy
 ca = accuracy.measure(train, predictions)
-for k,v in result_iterator(ca):
-    print k, v
-
+print ca

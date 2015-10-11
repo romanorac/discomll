@@ -16,7 +16,7 @@ test = dataset.Data(data_tag = [["http://ropot.ijs.si/data/fraction/test/xaaaaa.
                             y_index = 14,
                             delimiter = ",")
 
-predictions = locally_weighted_linear_regression.fit_predict(train, test, num_to_predict = 2, tau = 10)
+predictions = locally_weighted_linear_regression.fit_predict(train, test, tau = 1, samples_per_job = 0, save_results = True)
 print predictions
 
 

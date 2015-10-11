@@ -57,11 +57,10 @@ if __name__ == '__main__':
     Example was taken from: 
     http://www.dsplog.com/2012/02/05/weighted-least-squares-and-locally-weighted-linear-regression/  
     """
-    import load_dataset
+    import datasets
     import matplotlib.pyplot as plt
     
-    d = load_dataset.Data() #Load data
-    X, y = d.load_lwlr()
+    X, y = datasets.regression_data()
     
     lwlr = Locally_Weighted_Linear_Regression()
     taus = [1, 10, 25]
