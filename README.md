@@ -71,6 +71,13 @@ Public workflows:
 - [linear regression - linear dataset,](http://clowdflows.org/workflow/2815/)
 - [linear regression - fraction dataset,](http://clowdflows.org/workflow/2816/)
 
+## Release notes ##
+### version 0.1.4 ###
+ - improvments of ensemble algorithms,
+ - bug fixes of other algorithms.
+
+
+
 ## Additional info ##
 Write me at orac.roman@gmail.com.
 
