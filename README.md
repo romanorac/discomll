@@ -1,15 +1,16 @@
 # discomll #
 
-Disco Machine Learning Library (discomll) is a python package for machine learning with MapReduce paradigm. It works with Disco framework for distributed computing. discomll is suited for analysis of large datasets as it offers classification, regression and clustering algorithms. Examples are available in discomll example directory.
+Disco Machine Learning Library (discomll) is a python package for machine learning with MapReduce paradigm. It works with Disco framework for distributed computing. discomll is suited for analysis of large datasets as it offers classification, regression and clustering algorithms.
 
 ## Algorithms ##
 Classification algorithms
 - naive Bayes - discrete and continuous features, 
 - linear SVM - continuous features, binary target,
 - logistic regression - continuous features, binary target,
-- decision trees - discrete and continuous features, 
-- random forest - discrete and continuous features,
-- weighted forest - discrete and continuous features,
+- forest of distributed decision trees - discrete and continuous features,
+- distributed random forest - discrete and continuous features,
+- distributed weighted forest (experimental) - discrete and continuous features,
+- distributed weighted forest rand (experimental) - discrete and continuous features,
 
 Clustering algorithms
 - k-means - continuous features,
@@ -20,16 +21,16 @@ Regression algorithms
 
 Utilities
 - evaluation of the accuracy,
-- class distribution views,
-- algorithm model views.
+- distribution views,
+- model views.
 
 ## Features of discomll ##
 discomll works with following data sources:
-- datasets on Disco Distributed File System,
-- text or gziped data accessible via file server.
+- datasets on the Disco Distributed File System,
+- text or gziped datasets accessible via file server.
 
 discomll enables multiple settings for a dataset:
-- defining training and test dataset with multiple data sources,
+- multiple data sources,
 - feature selection,
 - feature type specification,
 - parsing of data,
@@ -37,7 +38,7 @@ discomll enables multiple settings for a dataset:
 
 ## Installing ##
 Prerequisites
-- Disco 0.5.1 or newer,
+- Disco 0.5.4,
 - numpy should be installed on all worker nodes,
 - orange and scikit-learn are used in unit tests.
 
@@ -76,17 +77,14 @@ Public workflows:
 - [linear regression - fraction dataset,](http://clowdflows.org/workflow/2816/)
 
 ## Release notes ##
-### version 0.1.4.1 (in development) ###
+### version 0.1.4.1 (Released 17/oct/2015) ###
  - model view fixed for ensembles,
  - bug fixes in examples and tests.
 
-### version 0.1.4 ###
+### version 0.1.4 (Released 11/oct/2015) ###
  - distributed weighted forest Rand was added. Algorithm is similar to distributed weighted forest, but it uses randomly selected medoids.
  - improvements of algorithms, especially ensembles,
  - performance analysis 2.
-
-## Additional info ##
-Write me at orac.roman@gmail.com.
 
 
 

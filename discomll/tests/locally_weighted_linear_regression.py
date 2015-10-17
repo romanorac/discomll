@@ -4,10 +4,11 @@ Locally Weighted Linear Regression
 
 import numpy as np
 
+
 class Locally_Weighted_Linear_Regression():
     """Iterative version of Locally Weighted Linear Regression """
 
-    def fit(self, X, y, X_est, tau = 1):
+    def fit(self, X, y, X_est, tau=1):
         """
         Fit X_est with Locally weighted linear regression according to X and y
 
@@ -33,24 +34,25 @@ class Locally_Weighted_Linear_Regression():
         http://cs229.stanford.edu/notes/cs229-notes1.pdf
         """
 
-        thetas = [] #init estimated thetas
-        estimation = [] #init estimation of X_est
+        thetas = []  # init estimated thetas
+        estimation = []  # init estimation of X_est
 
         if tau <= 0:
             print "tau should be greater than 0."
-            return [],[]
+            return [], []
 
-        for x in X_est: #for every sample in X_est
-            #calculate weights that depend on the particular vector x 
-            weights =  np.exp((-(X - x)*(X - x)).sum(axis = 1)/(2 * tau**2))            
-            W = np.diag(weights) #diagonal matrix with weights
-            x_W = np.dot(X.T, W) 
+        for x in X_est:  # for every sample in X_est
+            # calculate weights that depend on the particular vector x
+            weights = np.exp((-(X - x) * (X - x)).sum(axis=1) / (2 * tau ** 2))
+            W = np.diag(weights)  # diagonal matrix with weights
+            x_W = np.dot(X.T, W)
             A = np.dot(x_W, X)
             b = np.dot(x_W, y)
-            thetas.append(np.linalg.lstsq(A,b)[0])# calculate thetas for given x with: A^-1 * b
-            estimation.append(np.dot(x, thetas[-1])) # calculate estimation for given x and thetas 
+            thetas.append(np.linalg.lstsq(A, b)[0])  # calculate thetas for given x with: A^-1 * b
+            estimation.append(np.dot(x, thetas[-1]))  # calculate estimation for given x and thetas
 
         return thetas, estimation
+
 
 if __name__ == '__main__':
     """ 
@@ -59,19 +61,16 @@ if __name__ == '__main__':
     """
     import datasets
     import matplotlib.pyplot as plt
-    
+
     X, y = datasets.regression_data()
-    
+
     lwlr = Locally_Weighted_Linear_Regression()
     taus = [1, 10, 25]
-    plt.scatter(X[:,1], y) #Plot train data
-    
-    color = ["r","g", "b"]
+    plt.scatter(X[:, 1], y)  # Plot train data
+
+    color = ["r", "g", "b"]
     for i, tau in enumerate(taus):
-        thetas, estimation = lwlr.fit(X, y, X, tau = tau)
-        plt.plot(X[:,1] ,estimation, c = color[i]) #Plot prediction
+        thetas, estimation = lwlr.fit(X, y, X, tau=tau)
+        plt.plot(X[:, 1], estimation, c=color[i])  # Plot prediction
 
     plt.show()
-
-
-
