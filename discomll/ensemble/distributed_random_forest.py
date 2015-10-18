@@ -55,7 +55,7 @@ def map_fit(interface, state, label, inp):
                             if row[j] not in attr_mapping:
                                 attr_mapping[row[j]] = len(attr_mapping)
                             new_row.append(attr_mapping[row[j]])
-                    x.append(np.array(new_row, dtype=np.float32))
+                    x.append(new_row)
                     if row[state["y_index"]] not in y_mapping:
                         y_mapping[row[state["y_index"]]] = len(y_mapping)
                     y.append(y_mapping[row[state["y_index"]]])

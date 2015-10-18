@@ -94,7 +94,7 @@ def map_fit(interface, state, label, inp):
                                 if row[j] not in attr_mapping:
                                     attr_mapping[row[j]] = len(attr_mapping)
                                 new_row.append(attr_mapping[row[j]])
-                        x.append(np.array(new_row, dtype=np.float32))
+                        x.append(new_row)
                         if row[state["y_index"]] not in y_mapping:
                             y_mapping[row[state["y_index"]]] = len(y_mapping)
                         y.append(y_mapping[row[state["y_index"]]])
@@ -135,10 +135,11 @@ def map_fit(interface, state, label, inp):
             measure=measures.info_gain if state["measure"] == "info_gain" else measures.mdl,
             accuracy=state["accuracy"],
             separate_max=state["separate_max"])
-
+        print "Tree was built"
         if len(tree) < 2:
             print "tree was removed"
             continue
+
 
         tree_mapped = {}
         for k, v in tree.iteritems():
@@ -274,6 +275,7 @@ def fit(dataset, trees_per_chunk=3, max_tree_nodes=50, min_samples_leaf=10, min_
         class_majority = float(class_majority)
         num_medoids = int(num_medoids)
         separate_max = separate_max
+        accuracy = int(accuracy)
 
         if trees_per_chunk <= 0 or min_samples_leaf <= 0 or min_samples_split <= 0 or class_majority <= 0 or accuracy < 0:
             raise Exception("Parameters should be greater than 0.")

@@ -300,6 +300,7 @@ def fit(dataset, trees_per_chunk=3, max_tree_nodes=50, min_samples_leaf=10, min_
         min_samples_split = int(min_samples_split)
         class_majority = float(class_majority)
         separate_max = separate_max
+        accuracy = int(accuracy)
 
         if trees_per_chunk <= 0 or min_samples_leaf <= 0 or min_samples_split <= 0 or class_majority <= 0 or accuracy < 0:
             raise Exception("Parameters should be greater than 0.")

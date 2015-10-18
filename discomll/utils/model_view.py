@@ -19,7 +19,7 @@ def output_model(fitmodel_url):
     elif "linreg_fitmodel" in fitmodel_url:
         output = _linreg_model(fitmodel_url["linreg_fitmodel"])
     else:
-        output = "Model visualization not found."
+        output = "Model visualization not supported."
     return output
 
 
@@ -32,8 +32,9 @@ def _rf_model(fitmodel):
         elif k == "fill_in_values":
             continue
         else:
-            output += "Tree " + str(k) + "\n"
-            output += _tree_view(v[0], X_names) + "\n"
+            for num, tree in enumerate(v):
+                output += "tree" + str(num+1) + "\n"
+                output += _tree_view(tree, X_names) + "\n"
 
     return output
 
@@ -47,8 +48,9 @@ def _dt_model(fitmodel):
         elif k == "fill_in_values":
             continue
         else:
-            output += str(k) + "\n"
-            output += _tree_view(v[0], X_names) + "\n"
+            for num, tree in enumerate(v):
+                output += "tree" + str(num+1) + "\n"
+                output += _tree_view(tree, X_names) + "\n"
 
     return output
 

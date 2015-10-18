@@ -107,6 +107,7 @@ def map_fit_bootstrap(interface, state, label, inp):
 
     out = interface.output(0)
     num_samples = sum([1 for row in inp if len(row.strip().split(state["delimiter"])) > 1])
+    missing_vals_attr = set()
 
     for counter in range(state["trees_per_chunk"]):
         bag_indices = Counter(np.random.randint(num_samples, size=(num_samples)))
@@ -129,7 +130,7 @@ def map_fit_bootstrap(interface, state, label, inp):
                             if row[j] not in attr_mapping:
                                 attr_mapping[row[j]] = len(attr_mapping)
                             new_row.append(attr_mapping[row[j]])
-                    x.append(np.array(new_row, dtype=np.float32))
+                    x.append(new_row)
                     if row[state["y_index"]] not in y_mapping:
                         y_mapping[row[state["y_index"]]] = len(y_mapping)
                     y.append(y_mapping[row[state["y_index"]]])
@@ -137,6 +138,19 @@ def map_fit_bootstrap(interface, state, label, inp):
                 row_num += 1
         attr_mapping = {v: k for k, v in attr_mapping.iteritems()}
         y_mapping = {v: k for k, v in y_mapping.iteritems()}
+
+        if len(missing_vals_attr) > 0:
+            for i in range(len(state["X_indices"])):
+                if state["X_meta"][i] == "c":
+                    value = np.average([sample[i] for sample in x if type(sample[i]) == float])
+                    fill_in_values.append(value)
+                else:
+                    value = np.bincount([sample[i] for sample in x if type(sample[i]) == int]).argmax()
+                    fill_in_values.append(attr_mapping[value])
+                if i in missing_vals_attr:
+                    for j in range(len(x)):
+                        if x[j][i] in state["missing_vals"]:
+                            x[j][i] = value
 
         x = np.array(x, dtype=np.float32)
         y = np.array(y, dtype=np.uint16)
@@ -258,8 +272,7 @@ def fit(dataset, trees_per_chunk=1, bootstrap=True, max_tree_nodes=50, min_sampl
         accuracy = int(accuracy)
         separate_max = separate_max
         if trees_per_chunk > 1 and bootstrap == False:
-            print "Warning: bootstrap was set to true. trees_per_chunk should be 1 to disable bootstrap."
-            bootstrap = True
+            raise Exception("Parameter trees_per_chunk (or Trees per subset) should be 1 to disable bootstrap.")
         if trees_per_chunk <= 0 or min_samples_leaf <= 0 or class_majority <= 0 or min_samples_split <= 0 and accuracy < 0 or type(
                 bootstrap) != bool:
             raise Exception("Parameters should be greater than 0.")

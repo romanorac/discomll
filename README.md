@@ -77,6 +77,10 @@ Public workflows:
 - [linear regression - fraction dataset,](http://clowdflows.org/workflow/2816/)
 
 ## Release notes ##
+### version 0.1.4.2 (Released 18/oct/2015) ###
+ - model view bug fixes for ensembles,
+ - ensembles missing values support.
+ 
 ### version 0.1.4.1 (Released 17/oct/2015) ###
  - model view fixed for ensembles,
  - bug fixes in examples and tests.

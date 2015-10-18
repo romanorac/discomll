@@ -101,7 +101,6 @@ def fit_predict(training_data, fitting_data, tau=1, samples_per_job=0, save_resu
 
     if fitting_data.params["id_index"] == -1:
         raise Exception("Predict data should have id_index set.")
-        return {}
 
     job = Job(worker=Worker(save_results=save_results))
     job.pipeline = [
